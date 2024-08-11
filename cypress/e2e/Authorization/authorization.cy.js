@@ -48,8 +48,6 @@ describe('Test Authorization in website', () => {
             // Проверяем, что запрос был отправлен
             expect(interception.response.statusCode).to.eq(200) // Статус код ответа
             expect(interception.response.body.data).to.have.property('user_id') // Проверяем, что в запросе есть phoneNumber
-
-            sadasd 
         })
     });
 });
