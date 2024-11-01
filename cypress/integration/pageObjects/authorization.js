@@ -38,6 +38,7 @@ class authorizationPage {
     get authorizationSuccess(){
         return cy.contains('Авторизация прошла успешно')
     }
+
 }
 
 export default authorizationPage;
