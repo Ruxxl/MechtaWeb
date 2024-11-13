@@ -1,8 +1,10 @@
 import authorizationPage from "../../integration/pageObjects/authorization";
+import generalPageObject from "../../integration/pageObjects/general";
 
 describe('Test Authorization in website', () => {
     // Создаем новый объект страницы авторизации
     const AuthorizationPage = new authorizationPage()
+    const General = new generalPageObject()
     // Базовый URL из настроек окружения
     const baseUrl = Cypress.env('baseUrl')
 
@@ -23,7 +25,7 @@ describe('Test Authorization in website', () => {
         // Переходим на сайт
         cy.visit(baseUrl)
 
-        AuthorizationPage.selectCountry()
+        General.chooseCityPopUp.click()
 
         AuthorizationPage.userCabinetButton.click()
 

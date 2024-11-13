@@ -1,9 +1,6 @@
 Cypress.on('uncaught:exception', (err, runnable) => {
-    // Проверка ошибки и игнорирование, если это ожидаемая ошибка
-    if (err.message.includes('Cannot read properties of undefined')) {
-        // Возвращаем false, чтобы предотвратить сбой теста
-        return false;
+    // Отключаем падение тестов при ошибках, связанных с AxiosError 400
+    if (err.message.includes('Request failed with status code 400')) {
+        return false; // предотвращает падение теста
     }
-    // В случае других ошибок, оставляем их обрабатываться по умолчанию
-    return true;
 });

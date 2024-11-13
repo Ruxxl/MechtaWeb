@@ -1,7 +1,4 @@
 class authorizationPage {
-    get selectCountryPopup(){
-        return cy.get('.justify-between > .cursor-pointer > .q-icon')
-    }
 
     selectCountry(){
         this.selectCountryPopup.click()
