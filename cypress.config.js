@@ -6,7 +6,7 @@ module.exports = defineConfig({
       // implement node event listeners here
     },
     env: {
-      baseUrl: process.env.BASE_URL || 'https://d2.n2.mechta.kz'
+      baseUrl: process.env.BASE_URL || 'https://mechta.kz'
     }
   }
 });

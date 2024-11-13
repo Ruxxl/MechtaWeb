@@ -8,37 +8,25 @@ class authorizationPage {
     }
 
     get userCabinetButton(){
-        return cy.contains('Личный кабинет')
+        return cy.get('#user-profile')
     }
 
-    userCabinet(){
-        this.userCabinetButton.click()
+    get mobile_input() {
+        return cy.get('#mobile-input').type('77475776440')
     }
 
-    get SignOutSignInText(){
-        return cy.contains('Вход/Регистрация')
+    get get_sms_button() {
+        return cy.get('#get-sms-button')
     }
 
-    get EnterPhoneNumber(){
-        return cy.contains('Введите номер телефона, чтобы получать бонусы и следить за заказами')
+    get sms_input() {
+        return cy.get ('#sms-input')
+
     }
 
-    get inputPhoneNumber(){
-        return cy.xpath('//input[@placeholder=\'Мобильный телефон\']')
-    }
-
-    phoneNumberText(phoneNumber){
-        this.inputPhoneNumber.type(phoneNumber)
-    }
-
-    get SendSmsCodeButton(){
-        return cy.xpath('//span[@class=\'block\'][contains(.,\'Получить код\')]')
-    }
-
-    get authorizationSuccess(){
+    get auth_success() {
         return cy.contains('Авторизация прошла успешно')
     }
-
 }
 
 export default authorizationPage;
