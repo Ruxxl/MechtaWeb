@@ -1,4 +1,3 @@
-let firstItemId
 class Checkout {
     // Метод для получения категории iPhone
     get iphone_category() {
@@ -34,7 +33,9 @@ class Checkout {
             cy.get(`button#${firstItemId}`).click();  // Поиск кнопки с id и клик
             cy.wait(2000)
             cy.get(`button#${firstItemId}`).click();  // Поиск кнопки с id и клик
+            cy.get('.cursor-pointer > .q-icon').first().click()
             cy.contains(`${firstItemName}`).should('be.visible')
+
         });
     }
 
@@ -46,6 +47,20 @@ class Checkout {
         cy.url().should('eq', 'https://www.mechta.kz/checkout/');
         cy.contains('Оформление заказа').should('be.visible')
     }
+
+    get checkValidate_Input() {
+        cy.contains('Получить код').click()
+        cy.contains('Введите ваш номер').should("be.visible")
+            .as('Отображается ошибка "Номер не введен"')
+    }
+
+    get auth_success_check() {
+        cy.get('[aria-label="ФИО*"]').should('be.visible').as('Поле ФИО отображается')
+        cy.get('[aria-label="Электронная почта"]').should('be.visible').as('Поле с почтой отображается')
+        cy.contains('Продолжить').should("be.visible").as('Кнопка "Продолжить" отображается')
+    }
+
+
 }
 
 export default Checkout;

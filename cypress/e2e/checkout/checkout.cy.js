@@ -39,5 +39,20 @@ describe('Test checkout', () => {
         Checkout.checkout_button.click()
 
         Checkout.check_url_checkout
+
+        cy.contains('Вы не авторизованы').should('be.visible')
+
+        Checkout.checkValidate_Input
+
+        General.mobilePhone_input
+
+        cy.intercept('POST', '**/api/v2/login')
+            .as('user');
+
+        cy.contains('Получить код').click().wait(15000)
+
+        Checkout.check_login_response
+
+        Checkout.auth_success_check
     });
 })
