@@ -32,7 +32,8 @@ class Checkout {
 
             cy.get(`button#${firstItemId}`).click();  // Поиск кнопки с id и клик
             cy.wait(2000)
-            cy.get(`button#${firstItemId}`).click();  // Поиск кнопки с id и клик
+            cy.get(`button#${firstItemId}`).click();
+            cy.wait(2000)// Поиск кнопки с id и клик
             cy.get('.cursor-pointer > .q-icon').first().click()
             cy.contains(`${firstItemName}`).should('be.visible')
 
@@ -58,6 +59,13 @@ class Checkout {
         cy.get('[aria-label="ФИО*"]').should('be.visible').as('Поле ФИО отображается')
         cy.get('[aria-label="Электронная почта"]').should('be.visible').as('Поле с почтой отображается')
         cy.contains('Продолжить').should("be.visible").as('Кнопка "Продолжить" отображается')
+    }
+
+    get checkText_in_checkout(){
+        cy.contains('Личная информация').should("be.visible").as('Поле "Личный кабинет')
+        cy.contains('Способ доставки').should("be.visible").as('Поле "Способ доставки"')
+        cy.contains('Способ оплаты').should("be.visible").as('Поле "Способ оплаты"')
+        cy.contains('Подтверждение заказа').should("be.visible").as('Поле "Подтверждение заказа"')
     }
 
 
