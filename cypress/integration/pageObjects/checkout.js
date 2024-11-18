@@ -30,10 +30,10 @@ class Checkout {
                 .first().should('be.visible')
                 .trigger('mouseover')
 
-            cy.get(`button#${firstItemId}`).click();  // Поиск кнопки с id и клик
-            cy.wait(2000)
-            cy.get(`button#${firstItemId}`).click();
-            cy.wait(2000)// Поиск кнопки с id и клик
+            cy.get(`button[data-id = ${firstItemId}]`).click();  // Поиск кнопки с id и клик
+            cy.wait(1000)
+            cy.get(`button[data-id = ${firstItemId}]`).click()
+            cy.wait(1000)// Поиск кнопки с id и клик
             cy.get('.cursor-pointer > .q-icon').first().click()
             cy.contains(`${firstItemName}`).should('be.visible')
 
