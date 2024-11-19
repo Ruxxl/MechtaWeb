@@ -1,7 +1,7 @@
 import authorizationPage from "../../integration/pageObjects/authorization/auth_positive";
 import generalPageObject from "../../integration/pageObjects/general";
 
-describe('Test Authorization in website', () => {
+describe('Авторизация с корректными данными', () => {
     // Создаем новый объект страницы авторизации
     const AuthorizationPage = new authorizationPage()
     const General = new generalPageObject()
@@ -21,7 +21,7 @@ describe('Test Authorization in website', () => {
         }
     });
 
-    it('Sign in', () => {
+    it('Ввод номера телефона и смс кода', () => {
         // Переходим на сайт
         cy.visit(baseUrl)
 
@@ -33,14 +33,16 @@ describe('Test Authorization in website', () => {
 
         AuthorizationPage.get_sms_button.click()
 
+
         AuthorizationPage.sms_input.should('be.visible')
 
         cy.wait(10000)
 
         AuthorizationPage.auth_success.should('be.visible')
 
-        cy.wait(3000)
+        AuthorizationPage.link_cabinet.click()
 
         cy.url().should('eq', 'https://www.mechta.kz/cabinet/')
+            .as('Ссылка отображается корректно')
     });
 });

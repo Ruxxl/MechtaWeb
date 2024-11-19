@@ -24,6 +24,10 @@ class authorizationPage {
     get auth_success() {
         return cy.contains('Авторизация прошла успешно')
     }
+
+    get link_cabinet(){
+        return cy.get('#user-cabinet-profile')
+    }
 }
 
 export default authorizationPage;
