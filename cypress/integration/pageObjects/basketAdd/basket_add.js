@@ -13,30 +13,88 @@ class BasketAdd {
             const formattedPrice = itemsPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + ' ₸';
             const itemsEarnedBonus = interception.response.body.data.items[0].earned_bonus;
             expect(itemsEarnedBonus).to.exist;
-            const formattedBonus = `до ${new Intl.NumberFormat('ru-RU').format(itemsEarnedBonus)}`.replace(/\s/g, '\u00A0');
+            const formattedBonus = `до ${new Intl.NumberFormat('ru-RU').format(itemsEarnedBonus)}`.replace(/\s/g, '\u00A0'); // Неразрывные пробелы
             const itemsEarnedChips = interception.response.body.data.items[0].earned_chips;
             expect(itemsEarnedChips).to.exist;
 
-            cy.contains(itemsName).should('be.visible')
-                .as('Наименование товара отображается')
-            cy.contains(formattedPrice).should('be.visible')
-                .as('Цена товара отображается');
+            //Подефолту кол-во товара 1
+            const defaultQuantity = '1'
 
-            cy.get('td[class="text-primary"]')// Находим td с атрибутом data-v-bf095b54
-                .invoke('text') // Извлекаем текст
+            //Сравнение дефолтного значения поле количество
+
+            cy.get('td')
+                .find(`div[id="${itemsId}-quantity"]`)
+                .find('span[class="quantity"]')
+                .should('exist')
+                .and('have.text', defaultQuantity)
+                .as('Наименование товара отображается')
+                .invoke('text')
+
+            //Сравнение значение Наименование товара
+
+            cy.get('td')
+                .find(`div[id="${itemsId}-name"]`)
+                .should('exist')
+                .and('have.text', itemsName)
+                .as('Наименование товара отображается')
+                .invoke('text')
+
+
+            //Сравнение значение Цена
+
+            cy.get('td')
+                .find(`div[id="${itemsId}-price"]`)
+                .should('exist')
+                .invoke('text')
                 .then((text) => {
-                    cy.log(`Текст в td: ${text}`);
-                    // Добавьте дополнительные проверки, если нужно
-                    expect(text).to.not.be.empty; // Пример проверки, что текст не пустой
+                    // Убираем разницу в типах пробелов
+                    const normalizedText = text.replace(/\s/g, ' ');
+                    const normalizedFormattedPrice = formattedPrice.replace(/\s/g, ' ');
+
+                    // Логирование
+                    cy.log(`Найденный текст: "${normalizedText}"`);
+                    cy.log(`Ожидаемый текст: "${normalizedFormattedPrice}"`);
+
+                    // Сравнение
+                    expect(normalizedText.trim()).to.eq(normalizedFormattedPrice.trim());
                 });
 
+            //Сравнение значение Бонус
 
+            cy.get('td')
+                .find(`div[id="${itemsId}-bonus"]`)
+                .should('exist')
+                .invoke('text')
+                .then((text) => {
+                    const normalizedText = text.replace(/\s/g, ''); // Убираем пробелы
+                    const normalizedBonus = formattedBonus.replace(/\s/g, ''); // Убираем пробелы из ожидаемого текста
+                    expect(normalizedText).to.eq(normalizedBonus);
+                });
+
+            //Сравнение значение Фишки
+
+            cy.get('td')
+                .find(`div[id="${itemsId}-chips"]`)
+                .should('exist') // Проверяем, что элемент существует
+                .invoke('text') // Извлекаем текст из элемента
+                .then((text) => {
+                    // Логируем найденный текст для отладки
+                    cy.log(`Текст из DOM: "${text}"`);
+
+                    // Удаляем знак "+" и пробелы, преобразуем в число
+                    const domChips = parseInt(text.replace(/[^\d]/g, ''), 10);
+
+                    // Сравниваем значение с сохраненным числом
+                    cy.log(`Значение из API: ${itemsEarnedChips}`);
+                    expect(domChips).to.eq(itemsEarnedChips);
+                });
         })
     }
 
-    get apiRequest(){
-        cy.intercept('GET', '**/api/v1/basket')
-            .as('basketRequest');
+    get checkoutButton_click(){
+        cy.get('#buttonCheckout').click()
+        cy.url()
+            .should('include', '/checkout'); // Проверяем, что URL содержит /checkout
     }
 }
 export default BasketAdd

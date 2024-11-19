@@ -2,6 +2,8 @@ class Checkout {
     // Метод для получения категории iPhone
     get iphone_category() {
         return cy.contains('Apple iPhone');
+        cy.url()
+            .should('include', '/section/apple-eql');
     }
 
     // Метод для получения текста на странице
