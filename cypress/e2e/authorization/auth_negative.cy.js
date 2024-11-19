@@ -1,9 +1,11 @@
-import authorizationPage from "../../integration/pageObjects/authorization";
+import authorizationPage from "../../integration/pageObjects/authorization/auth_positive";
 import generalPageObject from "../../integration/pageObjects/general";
+import auth_negative from "../../integration/pageObjects/authorization/auth_negative";
 
-describe('Test Authorization in website', () => {
+describe('Авторизация с некорректными данными', () => {
     // Создаем новый объект страницы авторизации
     const AuthorizationPage = new authorizationPage()
+    const AuthorizationNegative = new auth_negative()
     const General = new generalPageObject()
     // Базовый URL из настроек окружения
     const baseUrl = Cypress.env('baseUrl')
@@ -21,7 +23,7 @@ describe('Test Authorization in website', () => {
         }
     });
 
-    it('Sign in', () => {
+    it('Ввод неправильного номера телефона', () => {
         // Переходим на сайт
         cy.visit(baseUrl)
 
@@ -29,18 +31,10 @@ describe('Test Authorization in website', () => {
 
         AuthorizationPage.userCabinetButton.click()
 
-        AuthorizationPage.mobile_input
+        AuthorizationNegative.uncorrect_mobilePhone
 
-        AuthorizationPage.get_sms_button.click()
+        AuthorizationNegative.viewError_text
 
-        AuthorizationPage.sms_input.should('be.visible')
-
-        cy.wait(10000)
-
-        AuthorizationPage.auth_success.should('be.visible')
-
-        cy.wait(3000)
-
-        cy.url().should('eq', 'https://www.mechta.kz/cabinet/')
+        cy.url().should('eq', 'https://www.mechta.kz/')
     });
 });
