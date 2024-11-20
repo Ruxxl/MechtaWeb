@@ -54,25 +54,37 @@ describe('Test checkout', () => {
             expect(itemsName).to.exist;
         })
 
-        Checkout.checkout_button.click()
+        Checkout.checkout_button
+            .click()
 
         Checkout.check_url_checkout
 
         Checkout.checkText_in_checkout
 
-        cy.contains('Вы не авторизованы').should('be.visible')
+        cy.contains('Вы не авторизованы')
+            .should('be.visible')
 
         Checkout.checkValidate_Input
 
         General.mobilePhone_input
+            .type('0000000000')
 
         cy.intercept('POST', '**/api/v2/login')
             .as('user');
 
         cy.contains('Получить код')
             .click()
-            .wait(15000)
+
+        cy.scrollTo('top');
+
+        Checkout.smsCode_input
+            .type('0000')
 
         Checkout.auth_success_check
+
+        Checkout.continue_button.click()
+
+        Checkout.delivery_input
+
     });
 })

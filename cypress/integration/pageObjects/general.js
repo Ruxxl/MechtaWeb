@@ -4,8 +4,9 @@ class generalPageObject {
     }
 
     get mobilePhone_input(){
-        return cy.get('[aria-label="Мобильный телефон"]').type('7475776440')
+        return cy.get('[aria-label="Мобильный телефон"]')
     }
+
 }
 
 export default generalPageObject;

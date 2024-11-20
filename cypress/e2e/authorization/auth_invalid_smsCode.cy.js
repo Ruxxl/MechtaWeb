@@ -31,7 +31,7 @@ describe('Тест на неверный ввод смс кода', () => {
 
         AuthorizationPage.userCabinetButton.click()
 
-        AuthorizationPage.mobile_input
+        AuthorizationPage.mobile_input.type('7475776440')
 
         AuthorizationPage.get_sms_button.click()
 

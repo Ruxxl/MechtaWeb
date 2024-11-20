@@ -33,6 +33,13 @@ describe('Тестирование кнопки изменить номер', ()
 
         AuthorizationPage.get_sms_button.click()
 
+        cy.contains('Изменить номер').click()
 
+        cy.get('#mobile-input').should("be.visible")
+
+        cy.contains('Вход/Регистрация').should('be.visible')
+
+        AuthorizationPage.get_sms_button.should("be.visible")
+            .as('Кнопка получить код отображается')
     });
 });

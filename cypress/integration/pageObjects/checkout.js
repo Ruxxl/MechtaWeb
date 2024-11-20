@@ -70,6 +70,17 @@ class Checkout {
         cy.contains('Подтверждение заказа').should("be.visible").as('Поле "Подтверждение заказа"')
     }
 
+    get continue_button() {
+        return cy.get('#button-steps-info')
+    }
+
+    get smsCode_input() {
+        return cy.contains('Код из SMS')
+    }
+
+    get delivery_input(){
+        return cy.contains('Улица*').type('Аркалык')
+    }
 
 }
 
