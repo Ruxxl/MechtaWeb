@@ -66,10 +66,11 @@ describe('Test checkout', () => {
 
         Checkout.checkValidate_Input
 
+        let phone_number = '0000000000'
         General.mobilePhone_input
-            .type('0000000000')
+            .type(phone_number)
 
-        cy.intercept('POST', '**/api/v2/login')
+        cy.intercept('GET', '**/api/v2/user')
             .as('user');
 
         cy.contains('Получить код')
@@ -80,11 +81,46 @@ describe('Test checkout', () => {
         Checkout.smsCode_input
             .type('0000')
 
+        cy.intercept('GET', '**/api/v1/checkout').as('checkout_v1');
+
+        cy.wait('@user').then((interception) => {
+            // Проверка, что поле phone в данных ответа совпадает с phone_number
+            expect(interception.response.body.data.phone).to.equal(phone_number);
+
+            // Проверка, что поле authorized в ответе равно true
+            expect(interception.response.body.data.authorized).to.be.true;
+
+            // Дополнительные проверки, если нужно
+            expect(interception.response.body.result).to.be.true; // Убедиться, что result = true
+            expect(interception.response.body.errors).to.have.length(0); // Проверить, что ошибок нет
+        });
+
+        Checkout.payments_info
+
         Checkout.auth_success_check
 
-        Checkout.continue_button.click()
+        Checkout.continue_button_info.click()
+
+        cy.intercept('GET', '**/3.0/suggests*').as('suggests');
 
         Checkout.delivery_input
+
+        cy.wait('@suggests').then((interception) => {
+
+            // Сохраняем поле name из первого элемента ответа
+            const firstAdressName = interception.response.body.result.items[0].name;
+
+            // Используем cy.contains для клика по сохранённому значению
+            cy.contains(firstAdressName).click();
+        });
+
+        cy.wait(2000)
+
+        Checkout.continue_button_next.click()
+
+        Checkout.default_payment_type
+
+        Checkout.selectCashOnDeliveryPayment
 
     });
 })

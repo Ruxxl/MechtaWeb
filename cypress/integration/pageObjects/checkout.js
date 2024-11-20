@@ -70,7 +70,7 @@ class Checkout {
         cy.contains('Подтверждение заказа').should("be.visible").as('Поле "Подтверждение заказа"')
     }
 
-    get continue_button() {
+    get continue_button_info() {
         return cy.get('#button-steps-info')
     }
 
@@ -79,7 +79,62 @@ class Checkout {
     }
 
     get delivery_input(){
-        return cy.contains('Улица*').type('Аркалык')
+        return cy.contains('Улица*').type('Аркалык 46')
+    }
+
+    get continue_button_next(){
+        return cy.get('#button-steps-next')
+    }
+
+
+    get payments_info(){
+        cy.wait('@checkout_v1').then((interception) => {
+            // Сохраняем данные paymentinfo
+            this.paymentMethodsId = interception.response.body.data.payment_info.variants[0].id
+            this.paymentMethodsName = interception.response.body.data.payment_info.variants[0].name
+            this.delivery_paymentId = interception.response.body.data.payment_info.variants[4].id
+            this.delivery_paymentName = interception.response.body.data.payment_info.variants[4].name
+            cy.log(this.delivery_paymentId, this.delivery_paymentName)
+            if (this.paymentMethodsName === "Kaspi QR") {
+                // Сохраняем имя в переменную, если оно соответствует "Kaspi QR"
+                this.KaspiQr = this.paymentMethodsName;
+
+                cy.log('Способ оплаты сохранён:', this.KaspiQr);
+            } else {
+                // Если имя не совпадает, выводим сообщение
+                cy.log('Способ оплаты не найден или имя не совпадает с "Kaspi QR"');
+            }
+
+            if (this.delivery_paymentName === "Наличными курьеру") {
+                // Сохраняем имя в переменную, если оно соответствует "Наличными курьеру"
+                this.delivery_cash_payment = this.delivery_paymentName;
+
+                cy.log('Способ оплаты сохранён:', this.delivery_cash_payment);
+            } else {
+                // Если имя не совпадает, выводим сообщение
+                cy.log('Способ оплаты не найден или имя не совпадает с "Наличными курьеру"');
+            }
+        });
+    }
+
+    get default_payment_type(){
+        cy.then(() => {
+            cy.get(`div[id="${this.paymentMethodsId}"]`)
+                .should('be.visible')
+                .find('div[role="radio"]') // Ищем дочерние div
+                .should('have.attr', 'aria-checked', 'true');
+        })
+    }
+
+    get selectCashOnDeliveryPayment(){
+        cy.then(() => {
+            cy.get(`div[id="${this.delivery_paymentId}"]`)
+                .should('be.visible')
+                .find('div[role="radio"]') // Ищем дочерние div
+                .should('have.attr', 'aria-checked', 'false').as('Отображается не выбранным')
+                .click()
+                .should('have.attr', 'aria-checked', 'true').as('Отображается выбранным')
+        })
     }
 
 }
