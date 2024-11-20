@@ -33,7 +33,7 @@ describe('Тестирование кнопки изменить номер', ()
 
         AuthorizationPage.get_sms_button.click()
 
-        cy.contains('Изменить номер').click()
+        cy.get('#changePhone').click().as('Кнопка "Изменить номер" отображается')
 
         cy.get('#mobile-input').should("be.visible")
 
