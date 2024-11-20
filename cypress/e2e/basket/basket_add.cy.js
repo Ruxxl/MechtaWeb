@@ -1,4 +1,4 @@
-import checkout from "../../integration/pageObjects/checkout";
+import checkout from "../../integration/pageObjects/checkout/checkout";
 import generalPageObject from "../../integration/pageObjects/general";
 import basket_add from "../../integration/pageObjects/basketAdd/basket_add";
 

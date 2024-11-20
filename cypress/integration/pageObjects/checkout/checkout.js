@@ -35,7 +35,7 @@ class Checkout {
             cy.get(`button[data-id = ${firstItemId}]`).click();  // Поиск кнопки с id и клик
             cy.wait(1000)
             cy.get(`button[data-id = ${firstItemId}]`).click()
-            cy.wait(1000)// Поиск кнопки с id и клик
+            cy.wait(3000)// Поиск кнопки с id и клик
             cy.get('.cursor-pointer > .q-icon').first().click()
             cy.contains(`${firstItemName}`).should('be.visible')
 
@@ -134,6 +134,22 @@ class Checkout {
                 .should('have.attr', 'aria-checked', 'false').as('Отображается не выбранным')
                 .click()
                 .should('have.attr', 'aria-checked', 'true').as('Отображается выбранным')
+        })
+    }
+
+    get continue_order_button(){
+        return cy.contains('Продолжить')
+    }
+
+    get order_complete(){
+        return cy.contains('Подтвердить заказ')
+    }
+
+    get getCheckout_Id(){
+        cy.wait('@checkout_done').then((interception) => {
+            // Сохраняем данные paymentinfo
+            this.checkout_finish_id = interception.response.body.data.id
+            cy.log(this.checkout_finish_id).as('Получен ID заказа')
         })
     }
 

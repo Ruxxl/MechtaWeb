@@ -1,4 +1,4 @@
-import checkout from "../../integration/pageObjects/checkout";
+import checkout from "../../integration/pageObjects/checkout/checkout";
 import generalPageObject from "../../integration/pageObjects/general";
 
 describe('Авторизация в оформлении заказа', () => {

@@ -1,4 +1,4 @@
-import checkout from "../../integration/pageObjects/checkout";
+import checkout from "../../integration/pageObjects/checkout/checkout";
 import generalPageObject from "../../integration/pageObjects/general";
 
 describe('Test checkout', () => {
@@ -121,6 +121,14 @@ describe('Test checkout', () => {
         Checkout.default_payment_type
 
         Checkout.selectCashOnDeliveryPayment
+
+        Checkout.continue_button_next.click()
+
+        cy.intercept('POST', '**/api/v1/checkout').as('checkout_done');
+
+        Checkout.order_complete.click()
+
+        Checkout.getCheckout_Id
 
     });
 })
