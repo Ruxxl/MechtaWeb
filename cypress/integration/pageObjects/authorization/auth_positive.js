@@ -9,7 +9,7 @@ class authorizationPage {
     }
 
     get mobile_input() {
-        return cy.get('#mobile-input').type('77475776440')
+        return cy.get('#mobile-input')
     }
 
     get get_sms_button() {

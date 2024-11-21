@@ -29,14 +29,12 @@ describe('Авторизация с корректными данными', () =
 
         AuthorizationPage.userCabinetButton.click()
 
-        AuthorizationPage.mobile_input.type('7475776440')
+        AuthorizationPage.mobile_input.type('70000000000')
 
         AuthorizationPage.get_sms_button.click()
 
-
         AuthorizationPage.sms_input.should('be.visible')
-
-        cy.wait(10000)
+            .type('0000')
 
         AuthorizationPage.auth_success.should('be.visible')
 
