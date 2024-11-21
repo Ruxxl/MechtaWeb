@@ -137,12 +137,8 @@ class Checkout {
         })
     }
 
-    get continue_order_button(){
-        return cy.contains('Продолжить')
-    }
-
-    get order_complete(){
-        return cy.contains('Подтвердить заказ')
+    get order_complete_button(){
+        return cy.get('#button-order-confirmation')
     }
 
     get getCheckout_Id(){

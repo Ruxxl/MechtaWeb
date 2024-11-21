@@ -126,7 +126,7 @@ describe('Test checkout', () => {
 
         cy.intercept('POST', '**/api/v1/checkout').as('checkout_done');
 
-        Checkout.order_complete.click()
+        Checkout.order_complete_button.click()
 
         Checkout.getCheckout_Id
 

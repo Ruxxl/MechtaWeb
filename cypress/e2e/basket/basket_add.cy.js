@@ -63,9 +63,6 @@ describe('Test basket', () => {
 
         BasketAdd.basketRequest
 
-        //Кликаем и проверяем что перешли в оформление заказа
-
-        BasketAdd.checkoutButton_click
 
     });
 })
