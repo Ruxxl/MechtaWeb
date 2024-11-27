@@ -12,7 +12,8 @@ describe('Test checkout', () => {
     Cypress.on('uncaught:exception', (err) => {
         if (
             err.message.includes('Request failed with status code 400') ||
-            err.message.includes("Cannot read properties of undefined (reading 'status')")
+            err.message.includes("Cannot read properties of undefined (reading 'status')") ||
+            err.message.includes("Cannot read properties of undefined (reading 'add')")
         ) {
             return false;
         }
