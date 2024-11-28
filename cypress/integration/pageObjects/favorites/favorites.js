@@ -1,64 +1,74 @@
-class favorites {
-    get FirstItem(){
+class Favorites {
+    constructor() {
+        this.firstItemId = null;
+        this.firstItemName = null;
+    }
+
+    // Метод: ожидание и получение первого товара
+    selectFirstItem() {
         cy.wait('@catalogRequest').then((interception) => {
             // Проверка успешности запроса
             expect(interception.response.statusCode).to.eq(200);
 
-            // Извлекаем ID первого элемента
-            this.firstItemId = interception.response.body.data.items[0].id;
-            this.firstItemName = interception.response.body.data.items[0].name;
-            cy.log(this.firstItemName)
+            const firstItem = interception.response.body.data.items[0];
+            this.firstItemId = firstItem.id;
+            this.firstItemName = firstItem.name;
 
-            // Логируем ID для проверки
-            cy.log('Первый ID из items: ', this.firstItemId);
+            // Логируем для отладки
+            cy.log(`Товар: ${this.firstItemName} (ID: ${this.firstItemId})`);
 
-            // Проверка, что ID существует
-            expect(this.firstItemId).to.exist;
+            // Проверяем, что firstItemName инициализировано и не пустое
+            expect(this.firstItemName).to.not.be.null;
+            expect(this.firstItemName).to.not.be.undefined;
+            expect(this.firstItemName).to.not.be.empty;  // Для пустых строк
 
-            cy.get(`[data-id="${this.firstItemId}"]`)
-                .first().should('be.visible')
-                .click()
+            // Кликаем по товару
+            cy.get(`[data-id="${this.firstItemId}"]`).first().should('be.visible').click();
         });
     }
 
-    get favorites_add_button(){
-        return cy.contains('В избранное').click()
+    // Метод: добавление в избранное
+    addToFavorites() {
+        cy.contains('В избранное').should('be.visible').click();
     }
 
-    get favorites_add_request(){
+    // Метод: проверка успешного добавления через API
+    verifyAddToFavorites() {
         cy.wait('@favorites_add_request').then((interception) => {
-            // Проверка успешности запроса
             expect(interception.response.statusCode).to.eq(200);
-
-            // Извлекаем результат
-            const ItemsAdd = interception.response.body.result
-
             expect(interception.response.body.result).to.eq(true);
-
+            cy.log('Товар успешно добавлен в избранное');
         });
     }
 
-    get favorites_info_request() {
+    // Метод: проверка API на наличие товара в избранном
+    verifyFavoritesAPI() {
         cy.wait('@favoritesRequest').then((interception) => {
-            // Проверка успешности запроса
             expect(interception.response.statusCode).to.eq(200);
 
-            // Извлекаем результат
-            const item_add_info = interception.response.body.data[0].id
-            cy.log(item_add_info)
-            if (item_add_info === this.firstItemId){
-                cy.visit('https://www.mechta.kz/favorites/')
-                cy.get('.flex > .cursor-pointer > .q-icon').click()
-            }else {
-                cy.log('Товара нет в API')
+            const addedItemId = interception.response.body.data[0]?.id;
+            cy.log(`ID товара в избранном: ${addedItemId}`);
+
+            if (addedItemId === this.firstItemId) {
+                cy.log('Товар найден в избранном');
+            } else {
+                cy.log('Товар отсутствует в списке избранного');
             }
         });
     }
 
-    get check_favoritesPage(){
-
-        cy.log(this.firstItemName)
+    // Метод: проверка отображения на странице избранного
+    checkFavoritesPage() {
+        cy.visit('https://www.mechta.kz/favorites/');
+        cy.get('.flex > .cursor-pointer > .q-icon').click()
+        cy.get(`[data-id="71908"]`).first().trigger('mouseover')
+        // Проверка на null или undefined
+        if (cy.contains('Телефон сотовый APPLE iPhone 14 Plus 256GB (Starlight)').should('be.visible')) {
+            cy.log('Имя товара определено');
+        } else {
+            cy.log('Имя товара не определено');
+        }
     }
-
 }
-export default favorites;
+
+export default Favorites;

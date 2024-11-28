@@ -1,18 +1,15 @@
 import checkout from "../../integration/pageObjects/checkout/checkout";
 import generalPageObject from "../../integration/pageObjects/general";
-import basket_add from "../../integration/pageObjects/basketAdd/basket_add";
 import favorites from "../../integration/pageObjects/favorites/favorites";
 
 describe('Test basket', () => {
-
-    const Checkout = new checkout()
-    const General = new generalPageObject
-    const Favorites = new favorites()
+    const Checkout = new checkout();
+    const General = new generalPageObject();
+    const Favorites = new favorites();
 
     // Базовый URL из настроек окружения
-    const baseUrl = Cypress.env('baseUrl')
+    const baseUrl = Cypress.env('baseUrl');
 
-    let firstItemId
     Cypress.on('uncaught:exception', (err) => {
         if (
             err.message.includes('Request failed with status code 400') ||
@@ -25,47 +22,28 @@ describe('Test basket', () => {
     });
 
     it('add to cart', () => {
+        // Переход на сайт
+        cy.visit(baseUrl);
 
-        // Переходим на сайт
+        // Закрываем pop-up с выбором города
+        General.chooseCityPopUp.click();
 
-        cy.visit(baseUrl)
+        // Перехват запросов
+        cy.intercept('GET', '**/api/v2/catalog*').as('catalogRequest');
+        cy.intercept('POST', '**/api/v1/favorites').as('favorites_add_request');
+        cy.intercept('GET', '**/api/v1/favorites').as('favoritesRequest');
 
-        //Закрываем pop-up с выбором города
+        // Переход в категорию Apple
+        Checkout.iphone_category.click();
 
-        General.chooseCityPopUp.click()
+        // Проверка, что перешли на правильную страницу
+        Checkout.check_text.should('be.visible').and('contain', 'APPLE');
 
-        //Перехватываем запрос catalog
-
-        cy.intercept('GET', '**/api/v2/catalog*')
-            .as('catalogRequest');
-
-        //Переход в категорию Apple
-
-        Checkout.iphone_category.click()
-
-        //Проверка что перешли на страницу
-
-        Checkout.check_text.should('be.visible')  // Проверяем, что h1 существует и видим
-            .and('contain', 'APPLE')
-
-        //Перехватываем запрос basket
-
-        cy.intercept('POST', '**/api/v1/favorites')
-            .as('favorites_add_request');
-        cy.intercept('GET', '**/api/v1/favorites')
-            .as('favoritesRequest');
-
-        //Выбор и добавление товара в корзину
-
-        Favorites.FirstItem
-
-        Favorites.favorites_add_button
-
-        Favorites.favorites_add_request
-
-        Favorites.favorites_info_request
-
-        Favorites.check_favoritesPage
-
-    })
+        // Работа с избранным
+        Favorites.selectFirstItem();         // Выбираем первый товар
+        Favorites.addToFavorites();         // Добавляем товар в избранное
+        Favorites.verifyAddToFavorites();   // Проверяем, что товар успешно добавлен
+        Favorites.verifyFavoritesAPI();     // Проверяем через API наличие в избранном
+        Favorites.checkFavoritesPage();     // Проверяем отображение на странице избранного
+    });
 });
