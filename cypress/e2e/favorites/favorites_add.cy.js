@@ -12,6 +12,7 @@ describe('Test basket', () => {
     // Базовый URL из настроек окружения
     const baseUrl = Cypress.env('baseUrl')
 
+    let firstItemId
     Cypress.on('uncaught:exception', (err) => {
         if (
             err.message.includes('Request failed with status code 400') ||
@@ -49,12 +50,22 @@ describe('Test basket', () => {
 
         //Перехватываем запрос basket
 
+        cy.intercept('POST', '**/api/v1/favorites')
+            .as('favorites_add_request');
         cy.intercept('GET', '**/api/v1/favorites')
             .as('favoritesRequest');
 
         //Выбор и добавление товара в корзину
 
         Favorites.FirstItem
+
+        Favorites.favorites_add_button
+
+        Favorites.favorites_add_request
+
+        Favorites.favorites_info_request
+
+        Favorites.check_favoritesPage
 
     })
 });
