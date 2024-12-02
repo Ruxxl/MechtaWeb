@@ -7,6 +7,7 @@
 Склонируйте репозиторий:
 
 git clone https://github.com/Ruxxl/MechtaWeb.git
+
 Установите зависимости:
 
 npm install
