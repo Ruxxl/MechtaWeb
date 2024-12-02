@@ -2,63 +2,69 @@ import authorizationPage from "../../integration/pageObjects/authorization/auth_
 import generalPageObject from "../../integration/pageObjects/general";
 
 describe('Тест на неверный ввод смс кода', () => {
-    // Создаем новый объект страницы авторизации
-    const AuthorizationPage = new authorizationPage()
-    const General = new generalPageObject()
+    // Создаем объекты для страниц авторизации и общих элементов
+    const AuthorizationPage = new authorizationPage();
+    const General = new generalPageObject();
     // Базовый URL из настроек окружения
-    const baseUrl = Cypress.env('baseUrl')
+    const baseUrl = Cypress.env('baseUrl');
 
+    // Обработка исключений, чтобы игнорировать определенные ошибки
     Cypress.on('uncaught:exception', (err) => {
         if (
-            err.message.includes('Request failed with status code 400') ||
-            err.message.includes("Cannot read properties of undefined (reading 'status')") ||
-            err.message.includes("Cannot read properties of undefined (reading 'add')")
+            err.message.includes('Request failed with status code 400') || // Игнорируем ошибки статуса 400
+            err.message.includes("Cannot read properties of undefined (reading 'status')") || // Игнорируем ошибки, связанные с отсутствующими свойствами
+            err.message.includes("Cannot read properties of undefined (reading 'add')") // Игнорируем ошибки, связанные с вызовом метода 'add'
         ) {
-            return false;
+            return false; // Предотвращаем прерывание теста
         }
-        return true;
+        return true; // Все остальные ошибки остаются неконтролируемыми
     });
 
-    it('Ввод неверного смс кода"', () => {
-        // Переходим на сайт
-        cy.visit(baseUrl)
+    it('Ввод неверного смс кода', () => {
+        // Шаг 1: Переходим на сайт
+        cy.visit(baseUrl);
 
-        const enteredSmsCode = '1234'
+        // Код, который будет введен как неверный
+        const enteredSmsCode = '1234';
 
-        General.chooseCityPopUp.click()
+        // Шаг 2: Закрываем поп-ап выбора города
+        General.chooseCityPopUp.click();
 
-        AuthorizationPage.userCabinetButton.click()
+        // Шаг 3: Переходим в личный кабинет через кнопку
+        AuthorizationPage.userCabinetButton.click();
 
-        AuthorizationPage.mobile_input.type('77475776440')
+        // Шаг 4: Вводим номер телефона
+        AuthorizationPage.mobile_input.type('77475776440');
 
-        AuthorizationPage.get_sms_button.click()
+        // Шаг 5: Нажимаем кнопку для получения СМС-кода
+        AuthorizationPage.get_sms_button.click();
 
-        cy.intercept('POST', '**/api/v2/login')
-            .as('loginRequest');
+        // Шаг 6: Перехватываем запрос авторизации
+        cy.intercept('POST', '**/api/v2/login').as('loginRequest');
 
-        AuthorizationPage.sms_input.type(enteredSmsCode).wait(1000)
+        // Шаг 7: Вводим неверный СМС-код и ждем отправки запроса
+        AuthorizationPage.sms_input.type(enteredSmsCode).wait(1000);
 
+        // Шаг 8: Ожидаем завершения intercepted-запроса
         cy.wait('@loginRequest').then((interception) => {
-
-            // Проверка успешности запроса
-
+            // Проверяем, что сервер вернул статус 400
             expect(interception.response.statusCode).to.eq(400);
 
-            const smsCode = interception.response.body.errors[0]
-
+            // Получаем текст ошибки из ответа API
+            const smsCode = interception.response.body.errors[0];
             cy.log('Текст ошибки из API:', smsCode);
 
-            expect(smsCode).to.eq('Неверный код подтверждения')
+            // Убеждаемся, что текст ошибки соответствует ожидаемому
+            expect(smsCode).to.eq('Неверный код подтверждения');
 
+            // Шаг 9: Проверяем отображение ошибки на странице
             cy.get('div[role="alert"]').invoke('text').then((domErrorMessage) => {
-
-                // Логируем текст из страницы
+                // Логируем текст ошибки из DOM
                 cy.log('Текст ошибки на странице:', domErrorMessage);
 
                 // Убеждаемся, что текст в DOM совпадает с текстом из API
-
                 expect(domErrorMessage.trim()).to.eq(smsCode);
             });
-        })
+        });
     });
 });
