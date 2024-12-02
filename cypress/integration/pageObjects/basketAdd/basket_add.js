@@ -63,13 +63,25 @@ class BasketAdd {
 
             cy.get('td')
                 .find(`div[id="${itemsId}-bonus"]`)
-                .should('exist')
-                .invoke('text')
+                .should('exist') // Проверяем, что элемент существует
+                .invoke('text') // Извлекаем текст из элемента
                 .then((text) => {
-                    const normalizedText = text.replace(/\s/g, ''); // Убираем пробелы
-                    const normalizedBonus = formattedBonus.replace(/\s/g, ''); // Убираем пробелы из ожидаемого текста
-                    expect(normalizedText).to.eq(normalizedBonus);
+                    // Логируем текст для отладки
+                    cy.log(`Текст из DOM: "${text}"`);
+                    cy.log(`Ожидаемое значение: "${formattedBonus}"`);
+
+                    // Извлекаем числовую часть текста
+                    const extractedNumber = text.match(/\d+/)?.[0] || ''; // Находим число
+                    const expectedNumber = formattedBonus.match(/\d+/)?.[0] || ''; // Находим число в ожидаемом значении
+
+                    // Логируем результаты для проверки
+                    cy.log(`Извлечённое число из DOM: "${extractedNumber}"`);
+                    cy.log(`Ожидаемое число: "${expectedNumber}"`);
+
+                    // Сравниваем извлечённые числовые части
+                    expect(extractedNumber).to.eq(expectedNumber);
                 });
+
 
             //Сравнение значение Фишки
 

@@ -27,7 +27,7 @@ describe('Тестирование кнопки изменить номер', ()
 
         AuthorizationPage.userCabinetButton.click()
 
-        AuthorizationPage.mobile_input
+        AuthorizationPage.mobile_input.type('77000000000')
 
         AuthorizationPage.get_sms_button.click()
 

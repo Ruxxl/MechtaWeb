@@ -29,8 +29,6 @@ describe('Авторизация с корректными данными', () =
 
         AuthorizationPage.mobile_input.type('70000000000')
 
-        cy.contains ()
-
         AuthorizationPage.get_sms_button.click()
 
         AuthorizationPage.sms_input.should('be.visible')
