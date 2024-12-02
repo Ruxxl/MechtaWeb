@@ -3,14 +3,17 @@ import generalPageObject from "../../integration/pageObjects/general";
 import favorites from "../../integration/pageObjects/favorites/favorites";
 
 describe('Test basket', () => {
+    // Шаг 1: Создаем экземпляры объектов страницы для работы с Checkout, General и Favorites
     const Checkout = new checkout();
     const General = new generalPageObject();
     const Favorites = new favorites();
 
-    // Базовый URL из настроек окружения
+    // Шаг 2: Получаем базовый URL из настроек окружения
     const baseUrl = Cypress.env('baseUrl');
 
+    // Шаг 3: Обработка не пойманных исключений
     Cypress.on('uncaught:exception', (err) => {
+        // Игнорируем ошибки с кодом 400 и другие специфичные ошибки
         if (
             err.message.includes('Request failed with status code 400') ||
             err.message.includes("Cannot read properties of undefined (reading 'status')") ||
@@ -22,28 +25,28 @@ describe('Test basket', () => {
     });
 
     it('add to cart', () => {
-        // Переход на сайт
+        // Шаг 4: Переходим на сайт с базовым URL
         cy.visit(baseUrl);
 
-        // Закрываем pop-up с выбором города
+        // Шаг 5: Закрываем pop-up с выбором города
         General.chooseCityPopUp.click();
 
-        // Перехват запросов
-        cy.intercept('GET', '**/api/v2/catalog*').as('catalogRequest');
-        cy.intercept('POST', '**/api/v1/favorites').as('favorites_add_request');
-        cy.intercept('GET', '**/api/v1/favorites').as('favoritesRequest');
+        // Шаг 6: Перехватываем запросы, связанные с каталогом и избранным
+        cy.intercept('GET', '**/api/v2/catalog*').as('catalogRequest');  // Перехват запросов на каталог товаров
+        cy.intercept('POST', '**/api/v1/favorites').as('favorites_add_request');  // Перехват запроса на добавление в избранное
+        cy.intercept('GET', '**/api/v1/favorites').as('favoritesRequest');  // Перехват запроса на получение избранного
 
-        // Переход в категорию Apple
+        // Шаг 7: Переходим в категорию "iPhone"
         Checkout.iphone_category.click();
 
-        // Проверка, что перешли на правильную страницу
+        // Шаг 8: Проверяем, что перешли на страницу с товарами Apple
         Checkout.check_text.should('be.visible').and('contain', 'APPLE');
 
-        // Работа с избранным
-        Favorites.selectFirstItem();         // Выбираем первый товар
-        Favorites.addToFavorites();         // Добавляем товар в избранное
-        Favorites.verifyAddToFavorites();   // Проверяем, что товар успешно добавлен
-        Favorites.verifyFavoritesAPI();     // Проверяем через API наличие в избранном
-        Favorites.checkFavoritesPage();     // Проверяем отображение на странице избранного
+        // Шаг 9: Работа с избранным
+        Favorites.selectFirstItem();  // Шаг 9.1: Выбираем первый товар из списка
+        Favorites.addToFavorites();  // Шаг 9.2: Добавляем товар в избранное
+        Favorites.verifyAddToFavorites();  // Шаг 9.3: Проверяем, что товар был добавлен в избранное
+        Favorites.verifyFavoritesAPI();  // Шаг 9.4: Проверяем через API, что товар действительно в избранном
+        Favorites.checkFavoritesPage();  // Шаг 9.5: Проверяем отображение товара на странице избранного
     });
 });
