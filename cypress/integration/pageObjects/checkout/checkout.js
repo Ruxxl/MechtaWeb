@@ -34,7 +34,8 @@ class Checkout {
 
             cy.get(`button[data-id = ${firstItemId}]`).click();  // Поиск кнопки с id и клик
             cy.wait(1000)
-            cy.get(`button[data-id = ${firstItemId}]`).click()
+            cy.contains('Перейти в корзину').click()
+            //cy.get(`button[data-id = ${firstItemId}]`).click()
             cy.wait(3000)// Поиск кнопки с id и клик
             cy.get('.cursor-pointer > .q-icon').first().click()
             cy.contains(`${firstItemName}`).should('be.visible')

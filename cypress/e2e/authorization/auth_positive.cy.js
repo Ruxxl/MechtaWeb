@@ -8,18 +8,6 @@ describe('Авторизация с корректными данными', () =
     // Базовый URL из настроек окружения
     const baseUrl = Cypress.env('baseUrl');
 
-    // Обработка исключений, чтобы игнорировать определенные ошибки, возникающие в процессе теста
-    Cypress.on('uncaught:exception', (err) => {
-        if (
-            err.message.includes('Request failed with status code 400') || // Игнорируем ошибки статуса 400
-            err.message.includes("Cannot read properties of undefined (reading 'status')") || // Игнорируем ошибки, связанные с отсутствующими свойствами
-            err.message.includes("Cannot read properties of undefined (reading 'add')") // Игнорируем ошибки, связанные с вызовом метода 'add'
-        ) {
-            return false; // Предотвращаем прерывание теста
-        }
-        return true; // Все остальные ошибки остаются неконтролируемыми
-    });
-
     it('Ввод номера телефона и смс кода', () => {
         // Шаг 1: Переходим на базовый URL
         cy.visit(baseUrl);

@@ -11,19 +11,6 @@ describe('Test basket', () => {
     // Шаг 2: Получаем базовый URL из настроек окружения
     const baseUrl = Cypress.env('baseUrl');
 
-    // Шаг 3: Обработка не пойманных исключений
-    Cypress.on('uncaught:exception', (err) => {
-        // Игнорируем ошибки с кодом 400 и другие специфичные ошибки
-        if (
-            err.message.includes('Request failed with status code 400') ||
-            err.message.includes("Cannot read properties of undefined (reading 'status')") ||
-            err.message.includes("Cannot read properties of undefined (reading 'add')")
-        ) {
-            return false;
-        }
-        return true;
-    });
-
     it('add to cart', () => {
         // Шаг 4: Переходим на сайт с базовым URL
         cy.visit(baseUrl);
