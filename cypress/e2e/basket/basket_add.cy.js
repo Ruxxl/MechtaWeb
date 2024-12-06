@@ -1,6 +1,6 @@
 import checkout from "../../integration/pageObjects/checkout/checkout";
 import generalPageObject from "../../integration/pageObjects/general";
-import basket_add from "../../integration/pageObjects/basketAdd/basket_add";
+import basket_add from "../../integration/pageObjects/basket/basket_add";
 
 describe('Test basket', () => {
 
