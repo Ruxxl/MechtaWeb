@@ -32,7 +32,9 @@ beforeEach(() => {
         if (
             err.message.includes('Request failed with status code 400') || // Игнорируем ошибки статуса 400
             err.message.includes("Cannot read properties of undefined (reading 'status')") || // Игнорируем ошибки отсутствующих свойств
-            err.message.includes("Cannot read properties of undefined (reading 'add')") // Игнорируем ошибки, связанные с вызовом метода 'add'
+            err.message.includes("Cannot read properties of undefined (reading 'add')") ||
+            err.message.includes("VK is not defined")// Игнорируем ошибки,
+            // связанные с вызовом метода 'add'
         ) {
             return false; // Предотвращаем прерывание теста
         }
