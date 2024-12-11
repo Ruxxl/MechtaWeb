@@ -21,13 +21,14 @@ beforeEach(() => {
             method: /POST|GET|HEAD/, // Перехватываем как POST, так и GET запросы
             url: /https:\/\/(www\.google-analytics\.com\/j\/collect\/*|analytics\.google\.com\/(g|j)|mc\.yandex\.ru\/|api\.lab\.amplitude\.com\/.*|yandex\.ru\/.*|personalization-web-stable\.mindbox\.ru\/.*)/, // Регулярное выражение для URL
         },
-        {
+    {
             log: false, // Отключаем логирование
             onRequest(req) {
                 console.log('Intercepted request:', req); // Это позволит проверить, перехвачен ли запрос
             }
         }
     );
+    cy.viewport(1280, 720);
     Cypress.on('uncaught:exception', (err) => {
         if (
             err.message.includes('Request failed with status code 400') || // Игнорируем ошибки статуса 400
