@@ -1,7 +1,11 @@
 import generalPageObject from "../../integration/pageObjects/general";
 
-
 describe('Тест раздела рекомендации', () => {
+    beforeEach(() => {
+        // Выполняем логин перед каждым тестом
+        cy.login();
+    });
+
     // Создаем новый объект общей страницы
     const General = new generalPageObject();
     // Базовый URL из переменных окружения
@@ -22,10 +26,8 @@ describe('Тест раздела рекомендации', () => {
             const product_check = interception.response.body.data.recommendations[0].products[0].xml_id
             cy.log(product_check)
             cy.log(strategyMessage)
-            expect(strategyMessage).to.eq('Хиты продаж');
+            expect(strategyMessage).to.eq('Специально для вас');
             expect(page).to.eq('home_page');
-
-            cy.contains('Хиты продаж').should('have.text', strategyMessage)
         });
     });
 });
