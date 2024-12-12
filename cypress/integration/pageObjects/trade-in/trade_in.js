@@ -1,3 +1,4 @@
+import 'cypress-real-events/support';
 class trade_in {
 
     // Метод для перехвата запросов

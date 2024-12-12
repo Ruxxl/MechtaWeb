@@ -1,6 +1,8 @@
 import generalPageObject from "../../integration/pageObjects/general";
 import authorizationPage from "../../integration/pageObjects/authorization/auth_positive";
 import trade_in from "../../integration/pageObjects/trade-in/trade_in";
+import 'cypress-real-events/support';
+
 
 describe('Тест на trade-in', () => {
     // Создаем новый объект для работы с общей страницей
