@@ -7,60 +7,78 @@ describe('Тест раздела рекомендации', () => {
         cy.login();
     });
 
-    // Создаем новый объект общей страницы
+    // Создаем объект для работы с элементами общей страницы
     const General = new generalPageObject();
-    const Recommendations = new recommendations()
-    // Базовый URL из переменных окружения
+    // Создаем объект для работы с элементами и запросами раздела рекомендаций
+    const Recommendations = new recommendations();
+
+    // Базовый URL, указанный в переменных окружения
     const baseUrl = Cypress.env('baseUrl');
-    const favorites_page = 'https://www.mechta.kz/favorites/'
-    const product_page = 'https://www.mechta.kz/product/telefon-sotovyy-apple-iphone-14-plus-256gb-starlight/'
-    const compare_page = 'https://www.mechta.kz/compare/'
+    // URL страницы избранного
+    const favorites_page = 'https://www.mechta.kz/favorites/';
+    // URL страницы товара
+    const product_page = 'https://www.mechta.kz/product/telefon-sotovyy-apple-iphone-14-plus-256gb-starlight/';
+    // URL страницы сравнения
+    const compare_page = 'https://www.mechta.kz/compare/';
 
     it('Проверка на главной странице', () => {
-        Recommendations.request
+        // Устанавливаем перехват для API-запроса рекомендаций
+        Recommendations.request;
 
-        cy.visit(baseUrl)
+        // Открываем главную страницу
+        cy.visit(baseUrl);
 
-        General.chooseCityPopUp.click()
+        // Закрываем попап выбора города, если он отображается
+        General.chooseCityPopUp.click();
 
-        Recommendations.wait_request_homePage
+        // Ожидаем выполнения API-запроса рекомендаций для главной страницы
+        Recommendations.wait_request_homePage;
     });
 
     it('Проверка в карточке товара', () => {
+        // Устанавливаем перехват для API-запроса рекомендаций
+        Recommendations.request;
 
-        Recommendations.request
+        // Открываем страницу товара
+        cy.visit(product_page);
 
-        cy.visit(product_page)
+        // Нажимаем на элемент, связанный с рекомендациями (например, иконка)
+        cy.get('.flex > .cursor-pointer > .q-icon').click();
 
-        cy.get('.flex > .cursor-pointer > .q-icon').click()
+        // Ожидаем выполнения API-запроса рекомендаций для страницы товара
+        Recommendations.wait_request_itemPage;
 
-        Recommendations.wait_request_itemPage
-
-        cy.contains('Похожие товары').should('be.visible')
-        cy.contains('Сопутствующие товары').should('be.visible')
-
+        // Проверяем, что блок "Похожие товары" отображается
+        cy.contains('Похожие товары').should('be.visible');
+        // Проверяем, что блок "Сопутствующие товары" отображается
+        cy.contains('Сопутствующие товары').should('be.visible');
     });
 
     it('Проверка в Избранное', () => {
+        // Устанавливаем перехват для API-запроса рекомендаций
+        Recommendations.request;
 
-        Recommendations.request
+        // Открываем страницу избранного
+        cy.visit(favorites_page);
 
-        cy.visit(favorites_page)
+        // Закрываем попап выбора города, если он отображается
+        General.chooseCityPopUp.click();
 
-        General.chooseCityPopUp.click()
-
-        Recommendations.wait_request_favorites_page
+        // Ожидаем выполнения API-запроса рекомендаций для страницы избранного
+        Recommendations.wait_request_favorites_page;
     });
 
     it('Проверка в Cравнении', () => {
+        // Устанавливаем перехват для API-запроса рекомендаций
+        Recommendations.request;
 
-        Recommendations.request
+        // Открываем страницу сравнения
+        cy.visit(compare_page);
 
-        cy.visit(compare_page)
+        // Закрываем попап выбора города, если он отображается
+        General.chooseCityPopUp.click();
 
-        General.chooseCityPopUp.click()
-
-        Recommendations.wait_request_comparePage
+        // Ожидаем выполнения API-запроса рекомендаций для страницы сравнения
+        Recommendations.wait_request_comparePage;
     });
 });
-
