@@ -58,5 +58,9 @@ describe('Тест главной страницы', () => {
 
         Home_page.games_and_console
 
+        Home_page.branzone_check
+
+        Home_page.actions_and_news_check
+
     });
 });

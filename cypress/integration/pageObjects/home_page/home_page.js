@@ -33,6 +33,10 @@ class home_page {
 
         cy.intercept('GET', '**/api/v2/viewed-products/viewed').as('viewed_products')
 
+        cy.intercept('GET', '**/api/v2/news**').as('news')
+
+        cy.intercept('GET', '**/api/v2/main-page/actions**').as('actions')
+
     }
 
     get wait_user_request() {
@@ -122,7 +126,7 @@ class home_page {
     }
 
     get wait_mindbox_catalog_request() {
-        cy.wait('@mindbox_catalog').then((interception) => {
+        cy.wait('@mindbox_catalog ').then((interception) => {
             // Проверяем, что запрос завершился успешно
             expect(interception.response.statusCode).to.eq(200);
         });
@@ -139,6 +143,22 @@ class home_page {
         cy.wait('@brandzone_template').then((interception) => {
             // Проверяем, что запрос завершился успешно
             expect(interception.response.statusCode).to.eq(200);
+
+            const samsung_brand = interception.response.body.data.list[0].code
+            const honor_brand = interception.response.body.data.list[1].code
+            const lg_brand = interception.response.body.data.list[2].code
+            const apple_brand = interception.response.body.data.list[3].code
+            const xiaomi_brand = interception.response.body.data.list[4].code
+            const bosh_brand = interception.response.body.data.list[5].code
+            cy.log(samsung_brand, honor_brand, lg_brand, apple_brand, xiaomi_brand, bosh_brand)
+
+            cy.wrap(samsung_brand).as('samsung_brand')
+            cy.wrap(honor_brand).as('honor_brand')
+            cy.wrap(lg_brand).as('lg_brand')
+            cy.wrap(apple_brand).as('apple_brand')
+            cy.wrap(xiaomi_brand).as('xiaomi_brand')
+            cy.wrap(bosh_brand).as('bosh_brand')
+
         });
     }
 
@@ -187,7 +207,7 @@ class home_page {
             expect(tv).to.equal('Телевизоры');
             cy.get('div a').contains(tv).should('exist').as( ' Телевизоры отображаются');
         });
-    }
+    }     
 
     get smartphone_and_gadgets() {
         cy.get('@smartphone_and_gadget_category').then((smartphone_and_gadget_category) => {
@@ -209,6 +229,55 @@ class home_page {
             cy.get('div h2').contains(games_and_console).should('exist').as( ' Игры, консоли и развлечения отображаются');
         });
     }
+
+    get branzone_check() {
+        cy.get('[aria-label="Visit Samsung"]').should('be.visible')
+        cy.get('[aria-label="Visit HONOR"]').should('be.visible')
+        cy.get('[aria-label="Visit LG"]').should('be.visible')
+        cy.get('[aria-label="Visit Xiaomi"]').should('be.visible')
+        cy.get('[aria-label="Visit Apple"]').should('be.visible')
+        cy.get('[aria-label="Visit Bosch"]').should('be.visible')
+
+        // Массив брендов и их псевдонимов
+        const brands = [
+            { alias: '@samsung_brand', hrefPart: 'samsung' },
+            { alias: '@honor_brand', hrefPart: 'honor' },
+            { alias: '@lg_brand', hrefPart: 'lg' },
+            { alias: '@apple_brand', hrefPart: 'apple' },
+            { alias: '@xiaomi_brand', hrefPart: 'xiaomi' },
+            { alias: '@bosh_brand', hrefPart: 'bosch' }
+        ];
+
+        // Цикл для проверки каждого бренда
+        brands.forEach(({ alias, hrefPart }) => {
+            cy.get(alias).then((brandCode) => {
+                cy.get(`a[href*="/brands/${hrefPart}/"]`).then((element) => {
+                    const hrefValue = element.attr('href');
+                    // Сравниваем значение href с кодом бренда
+                    expect(hrefValue).to.include(`/${brandCode}/`);
+                });
+            });
+        });
+    }
+
+    get actions_and_news_check() {
+
+        cy.scrollTo(0, 3600).wait(1000); // Прокрутка до координаты 2000 пикселей по оси Y
+
+        cy.wait('@news').then((interception) => {
+            // Проверяем, что запрос завершился успешно
+            expect(interception.response.statusCode).to.eq(200);
+            const total_count = interception.response.body.data.total_count
+            expect(total_count).to.eq(5)
+        });
+
+        cy.wait('@actions').then((interception) => {
+            // Проверяем, что запрос завершился успешно
+            expect(interception.response.statusCode).to.eq(200);
+        });
+
+    }
+
 }
 
 export default home_page
