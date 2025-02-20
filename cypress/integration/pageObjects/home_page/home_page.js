@@ -1,8 +1,3 @@
-import
-import * as stream from "node:stream";
-import * as tty from "node:tty";
-import pre_order from "../pre-order/pre_order";
-
 class home_page {
 
     constructor() {
@@ -280,21 +275,7 @@ class home_page {
             // Проверяем, что запрос завершился успешно
             expect(interception.response.statusCode).to.eq(200);
         });
-
-       cy.get('')
-
-        cy.wrap(total.code.text()
-        stream).d2.n2.mechta.kz
-        dispatchEvent(false)
-        tty:
-
-        pre_order.toString('Title', 'd2.n2.mech')
-
     }
-
-
-
-
 }
 
 export default home_page
