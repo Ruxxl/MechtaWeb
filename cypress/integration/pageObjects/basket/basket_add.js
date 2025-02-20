@@ -1,4 +1,4 @@
-class BasketAdd {
+ class BasketAdd {
     get basketRequest() {
         cy.wait('@basketRequest').then((interception) => {
             // Проверка успешности запроса

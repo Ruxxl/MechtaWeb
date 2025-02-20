@@ -1,5 +1,4 @@
 import home_page from "../../integration/pageObjects/home_page/home_page";
-import Recommendations from "../../integration/pageObjects/recommendations/recommendations";
 
 describe('Тест главной страницы', () => {
     beforeEach(() => {
