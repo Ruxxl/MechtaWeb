@@ -5,7 +5,7 @@ class authorizationPage {
     }
 
     get userCabinetButton(){
-        return cy.get('#user-profile')
+        return cy.get('#user-cabinet-profile')
     }
 
     get mobile_input() {

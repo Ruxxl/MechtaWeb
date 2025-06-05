@@ -10,10 +10,7 @@ describe('Тестирование кнопки изменить номер', ()
 
     it('Ввод номера телефона и кликнуть на "Изменить номер"', () => {
         // Шаг 1: Переходим на сайт
-        cy.visit(baseUrl);
-
-        // Шаг 2: Закрываем поп-ап выбора города
-        General.chooseCityPopUp.click();
+        cy.visit(baseUrl).wait(7000)
 
         // Шаг 3: Переходим в личный кабинет через соответствующую кнопку
         AuthorizationPage.userCabinetButton.click();

@@ -11,21 +11,18 @@ describe('Авторизация в оформлении заказа', () => {
 
     it('Авторизация в оформлении заказа', () => {
         // Шаг 1: Переходим на сайт
-        cy.visit(baseUrl);
-
-        // Шаг 2: Закрываем поп-ап выбора города
-        General.chooseCityPopUp.click();
+        cy.visit(baseUrl).wait(7000)
 
         // Шаг 3: Перехватываем запрос каталога товаров
         cy.intercept('GET', '**/api/v2/catalog*')
             .as('catalogRequest');
 
         // Шаг 4: Выбираем категорию iPhone
-        Checkout.iphone_category.click();
+        Checkout.iphone_category;
 
         // Шаг 5: Проверяем, что заголовок страницы отображается и содержит "APPLE"
         Checkout.check_text.should('be.visible')
-            .and('contain', 'APPLE');
+            .and('contain', 'Смартфоны, мобильные телефоны');
 
         // Шаг 6: Перехватываем запрос корзины
         cy.intercept('GET', '**/api/v1/basket')

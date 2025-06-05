@@ -19,7 +19,7 @@ beforeEach(() => {
     cy.intercept(
         {
             method: /POST|GET|HEAD/, // Перехватываем как POST, так и GET запросы
-            url: /https:\/\/(www\.google-analytics\.com\/j\/collect\/*|analytics\.google\.com\/(g|j)|mc\.yandex\.ru\/|api\.lab\.amplitude\.com\/.*|yandex\.ru\/.*|personalization-web-stable\.mindbox\.ru\/.*|api\.mindbox\.ru\/v1\.1\/customer\/track-visit\?version=1\.0\.676&transport=XmlHttpRequest|web-static\.mindbox\.ru\/js\/byendpoint\/mechtawebsite\.js\?_=\d+|sr-client-cfg\.amplitude\.com\/.*|autocomplete\.diginetica\.net\/.*|ams\.creativecdn\.com\/.*|privacy-cs\.mail\.ru\/.*|api2\.amplitude\.com\/.*|api\.mdev\.kz\/.*|api\.mindbox\.ru\/.*)/,
+            url: /https:\/\/(www\.google-analytics\.com\/j\/collect\/*|analytics\.google\.com\/(g|j)|mc\.yandex\.ru\/|api\.lab\.amplitude\.com\/.*|yandex\.ru\/.*|personalization-web-stable\.mindbox\.ru\/.*|api\.mindbox\.ru\/v1\.1\/customer\/track-visit\?version=1\.0\.676&transport=XmlHttpRequest|web-static\.mindbox\.ru\/js\/byendpoint\/mechtawebsite\.js\?_=\d+|sr-client-cfg\.amplitude\.com\/.*|autocomplete\.diginetica\.net\/.*|ams\.creativecdn\.com\/.*|privacy-cs\.mail\.ru\/.*|api2\.amplitude\.com\/.*|api\.mdev\.kz\/.*|api\.mindbox\.ru\/.*|ad\.doubleclick\.net\/.*|www\.google\.com\/ccm\/collect\?)/,
 
 
 

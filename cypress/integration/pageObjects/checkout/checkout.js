@@ -1,9 +1,9 @@
 class Checkout {
     // Метод для получения категории iPhone
     get iphone_category() {
-        return cy.contains('Apple iPhone');
+        cy.visit('https://mechta.kz/section/smartfony/brend-apple/')
         cy.url()
-            .should('include', '/section/apple-eql');
+            .should('include', '/section/smartfony/brend-apple');
     }
 
     // Метод для получения текста на странице
@@ -32,9 +32,11 @@ class Checkout {
                 .first().should('be.visible')
                 .trigger('mouseover')
 
-            cy.get(`button[data-id = ${firstItemId}]`).click();  // Поиск кнопки с id и клик
-            cy.wait(1000)
+            cy.get(`[data-id = ${firstItemId}]`).click();  // Поиск кнопки с id и клик
+            cy.wait(7000)
+            cy.contains('В корзину').click()
             cy.contains('Перейти в корзину').click()
+
             //cy.get(`button[data-id = ${firstItemId}]`).click()
             cy.wait(3000)// Поиск кнопки с id и клик
             cy.get('.cursor-pointer > .q-icon').first().click()
