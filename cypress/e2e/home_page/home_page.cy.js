@@ -1,4 +1,5 @@
 import home_page from "../../integration/pageObjects/home_page/home_page";
+import recommendations_check from "../../integration/pageObjects/recommendations_check";
 
 describe('Тест главной страницы', () => {
     beforeEach(() => {
@@ -7,6 +8,7 @@ describe('Тест главной страницы', () => {
     });
 
     const Home_page = new home_page()
+    const Recommendations_check = new recommendations_check()
 
     // Базовый URL, указанный в переменных окружения
     const baseUrl = Cypress.env('baseUrl');
@@ -15,7 +17,9 @@ describe('Тест главной страницы', () => {
 
         Home_page.requests_in_home_page
 
-        cy.visit(baseUrl).wait(7000)
+        Recommendations_check.recommendations_intercept
+
+        cy.visit(baseUrl).wait(10000)
 
         Home_page.wait_resolve_request
 
@@ -25,7 +29,7 @@ describe('Тест главной страницы', () => {
 
         Home_page.wait_menu_catalog_request
 
-        Home_page.wait_post_recommendations_request
+        Recommendations_check.recommendations_request_check
 
         Home_page.wait_favorites_request
 

@@ -18,7 +18,6 @@ class home_page {
 
         cy.intercept('GET', '**/api/v2/main-page/banners**').as('banners')
 
-        cy.intercept('POST', '**/api/v2/recommendations').as('post_recommendations')
 
         cy.intercept('GET', '**/api/v2/header/popular-categories').as('popular_categories')
 
