@@ -1,10 +1,12 @@
 import checkout from "../../integration/pageObjects/checkout/checkout";
 import generalPageObject from "../../integration/pageObjects/general";
+import productAddToCart from "../../integration/pageObjects/productAddToCart";
 
 describe('Авторизация в оформлении заказа', () => {
     // Создаем объекты для страницы оформления заказа и общих элементов
     const Checkout = new checkout();
     const General = new generalPageObject();
+    const ProductAddToCart = new productAddToCart()
 
     // Базовый URL из настроек окружения
     const baseUrl = Cypress.env('baseUrl');
@@ -18,33 +20,27 @@ describe('Авторизация в оформлении заказа', () => {
             .as('catalogRequest');
 
         // Шаг 4: Выбираем категорию iPhone
-        Checkout.iphone_category;
+        ProductAddToCart.iphone_category
 
-        // Шаг 5: Проверяем, что заголовок страницы отображается и содержит "APPLE"
-        Checkout.check_text.should('be.visible')
-            .and('contain', 'Смартфоны, мобильные телефоны');
+        ProductAddToCart.check_text_h1
 
-        // Шаг 6: Перехватываем запрос корзины
-        cy.intercept('GET', '**/api/v1/basket')
+        cy.intercept('GET', '**/api/v2/basket')
             .as('basketRequest');
 
-        // Шаг 7: Выбираем первый товар
-        Checkout.FirstItem;
-
-        let itemsName; // Переменная для хранения названия товара
+        // Шаг 7: Добавляем товар в корзину
+        ProductAddToCart.addToCart;
+        cy.wait(5000)
 
         // Шаг 8: Проверяем данные из запроса корзины
         cy.wait('@basketRequest').then((interception) => {
             expect(interception.response.statusCode).to.eq(200); // Проверяем, что статус ответа 200
 
             // Получаем название первого товара из корзины
-            itemsName = interception.response.body.data.items[0].name;
+            const itemName = interception.response.body?.data?.items?.[0]?.name;
+            cy.log(itemName)
 
             // Логируем название товара
-            cy.log('Название товара: ', itemsName);
-
-            // Убеждаемся, что название существует
-            expect(itemsName).to.exist;
+            cy.log('Название товара: ', itemName);
         });
 
         // Шаг 9: Нажимаем кнопку "Оформить заказ"

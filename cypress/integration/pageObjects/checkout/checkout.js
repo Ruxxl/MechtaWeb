@@ -50,7 +50,7 @@ class Checkout {
     }
 
     get check_url_checkout(){
-        cy.url().should('eq', 'https://www.mechta.kz/checkout/');
+        cy.url().should('eq', 'https://mechta.kz/checkout/');
         cy.contains('Оформление заказа').should('be.visible')
     }
 
