@@ -8,7 +8,7 @@
             expect(itemsId).to.exist;
             const itemsName = interception.response.body.data.items[0].name;
             expect(itemsName).to.exist;
-            const itemsPrice = interception.response.body.data.items[0].prices_per_item.base_price;
+            const itemsPrice = interception.response.body.data.items[0].prices_per_item.discounted_price;
             expect(itemsPrice).to.exist;
             const formattedPrice = itemsPrice.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + ' ₸';
             const itemsEarnedBonus = interception.response.body.data.items[0].earned_bonus;

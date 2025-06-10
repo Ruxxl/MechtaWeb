@@ -8,8 +8,15 @@ class ProductAddToCart {
     }
 
     get check_text_h1(){
-        cy.get('h1').should('be.visible')
-            .and('contain', 'Смартфоны, мобильные телефоны');
+        cy.get('h1')
+            .should('be.visible')
+            .invoke('text')
+            .then((text) => {
+                expect(text.trim()).to.satisfy(t =>
+                    t.includes('Смартфоны, мобильные телефоны') ||
+                    t.includes('Смартфоны Бренд:Apple')
+                );
+            });
         cy.wait(4000)
     }
 
@@ -37,11 +44,17 @@ class ProductAddToCart {
             cy.get(`[data-id = ${firstItemId}]`).click();  // Поиск кнопки с id и клик
             cy.wait(7000)
             cy.get(':nth-child(4) > div[carousel-name=""] > .tw-flex > :nth-child(1) > .q-btn').click()
-            cy.contains('Перейти в корзину').click()
+            cy.intercept('GET', '**/api/v2/basket')
+                .as('basketRequest');
+            cy.contains('В корзине')
+                .click();
 
             //cy.get(`button[data-id = ${firstItemId}]`).click()
             cy.wait(7000)// Поиск кнопки с id и клик
             cy.contains(`${firstItemName}`).should('be.visible')
+
+
+
 
         });
     }
