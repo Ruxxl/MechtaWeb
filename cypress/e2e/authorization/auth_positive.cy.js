@@ -11,7 +11,10 @@ describe('Авторизация с корректными данными', () =
 
     it('Ввод номера телефона и смс кода', () => {
         // Шаг 1: Переходим на базовый URL
-        cy.visit(baseUrl).wait(7000);
+        cy.visit(baseUrl)
+            .wait(10000);
+
+        AuthorizationPage.request
 
         // Шаг 3: Переходим в личный кабинет через соответствующую кнопку
         AuthorizationPage.userCabinetButton.click()
@@ -25,6 +28,8 @@ describe('Авторизация с корректными данными', () =
         // Шаг 6: Проверяем, что поле ввода СМС-кода отображается, и вводим код
         AuthorizationPage.sms_input.should('be.visible')
               .type('0000');
+
+        AuthorizationPage.wait_request_login
 
         // Шаг 7: Проверяем, что сообщение об успешной авторизации отображается
         AuthorizationPage.auth_success.should('be.visible');
